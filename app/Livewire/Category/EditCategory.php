@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Livewire\Category;
+
+use App\Repositories\Category\CategoryRepository;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+
+class EditCategory extends Component
+{
+    #[Title('Edit Category')]
+    public $category_id;
+    public $name;
+    public $description;
+    public $image;
+    protected $categoryRepository;
+
+    public function boot(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    public function mount($id)
+    {
+        $this->category_id = $id;
+
+        $category = $this->categoryRepository->getCategoryById($id);
+
+        $this->name = $category->name;
+        $this->description = $category->description;
+        $this->image = $category->image;
+    }
+
+    public function editCategory()
+    {
+        $this->categoryRepository->updateCategory($this->category_id, [
+            'name' => Str::title($this->name),
+            'description' => Str::ucfirst($this->description),
+            'image' => $this->image,
+        ]);
+
+        session()->flash('message', 'Category updated successfully.');
+        return $this->redirect(route('category'), navigate: true);
+    }
+
+    public function render()
+    {
+        return view('livewire.category.edit-category', [
+            'title' => 'Edit Category',
+        ]);
+    }
+}
