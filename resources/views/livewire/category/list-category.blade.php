@@ -17,32 +17,32 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             No</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Image</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Category</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Description</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Created at</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($categories as $i => $category)
                         <tr>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $i + 1 }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $i + 1 }}</td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 <img src="{{ $category->image ? asset('storage/categories/' . $category->image) : 'https://i.pravatar.cc/50' }}"
                                     class="w-10 h-10 rounded-full" alt="{{ $category->name }}">
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {{ $category->description ? $category->description : '-' }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $category->created_at }}</td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $category->created_at }}</td>
                             <td class="px-4 py-3 space-x-2 flex">
                                 <button type="button" data-modal-target="showCategory" data-modal-toggle="showCategory"
                                     wire:click="showDetailCategory('{{ $category->id }}')"
