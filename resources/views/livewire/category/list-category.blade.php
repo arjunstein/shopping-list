@@ -36,14 +36,16 @@
                         <tr>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $i + 1 }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
-                                <img src="https://i.pravatar.cc/50" class="w-8 h-8 rounded-full" alt="User avatar">
+                                <img src="{{ $category->image ? asset('storage/categories/' . $category->image) : 'https://i.pravatar.cc/50' }}"
+                                    class="w-10 h-10 rounded-full" alt="{{ $category->name }}">
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
                                 {{ $category->description ? $category->description : '-' }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $category->created_at }}</td>
                             <td class="px-4 py-3 space-x-2 flex">
-                                <button title="Detail"
+                                <button type="button" data-modal-target="showCategory" data-modal-toggle="showCategory"
+                                    wire:click="showDetailCategory('{{ $category->id }}')"
                                     class="w-10 h-10 inline-flex justify-center items-center bg-purple-600 text-white rounded hover:bg-purple-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -87,4 +89,72 @@
             {{ $categories->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
+
+    <!-- Main modal detail category -->
+    <div>
+        <div x-cloak x-show="$wire.showModal" x-transition id="showCategory"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black bg-opacity-50">
+            <div class="relative w-full max-w-md max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            {{ $showTitle ?? 'Category Details' }}
+                        </h3>
+                        <button type="button" @click="$wire.showModal = false"
+                            class="bg-red-500 text-white hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5">
+                        @if ($selectedCategory)
+                            <div class="grid gap-4 mb-4 grid-cols-2">
+                                <div class="col-span-2">
+                                    <label
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+                                    <div class="flex items-center justify-center">
+                                        <img src="{{ $selectedCategory->image ? asset('storage/categories/' . $selectedCategory->image) : 'https://i.pravatar.cc/500' }}" alt="{{ $selectedCategory->name }}"
+                                            class="w-20 h-20 rounded-lg">
+                                    </div>
+                                </div>
+                                <div class="col-span-2">
+                                    <label
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
+                                    <div
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                        {{ $selectedCategory->name }}
+                                    </div>
+                                </div>
+                                <div class="col-span-2">
+                                    <label
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                    <div
+                                        class="bg-gray-50 border h-auto border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                        {{ $selectedCategory->description ? $selectedCategory->description : '-' }}
+                                    </div>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Created
+                                        At</label>
+                                    <div
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                        {{ $selectedCategory->created_at->format('d M Y H:i') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Main modal detail category -->
+
 </div>

@@ -49,6 +49,11 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         // Validate the data
         $this->_validate($data);
 
+        // Handle image upload if present
+        if (isset($data['image'])) {
+            $data['image'] = $this->_saveImage($data['image']);
+        }
+        // Create the category
         return $this->model->create($data);
     }
 
@@ -71,6 +76,11 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
     public function deleteCategory($id)
     {
         $category = $this->getCategoryById($id);
+
+        // Delete the image in storage if it exists
+        if ($category->image) {
+            $this->_deleteImage($category->image);
+        }
         return $category->delete();
     }
 
@@ -80,5 +90,32 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
             ->orWhere('description', 'like', '%' . $search . '%')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
+    }
+
+    /**
+     * Save the image to storage
+     *
+     * @param \Illuminate\Http\UploadedFile $image
+     * @return string
+     */
+    private function _saveImage($image)
+    {
+        $imageName = 'category-' . date('dmYHis') . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('categories', $imageName, 'public');
+        return $imageName;
+    }
+
+    /**
+     * Delete the image from storage
+     *
+     * @param string $image
+     * @return void
+     */
+
+    private function _deleteImage($image)
+    {
+        if (file_exists(public_path('storage/categories/' . $image))) {
+            unlink(public_path('storage/categories/' . $image));
+        }
     }
 }

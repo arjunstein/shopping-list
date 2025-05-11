@@ -6,9 +6,12 @@ use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateCategory extends Component
 {
+    use WithFileUploads;
+
     #[Title('Create Category')]
     public $name;
     public $description;
