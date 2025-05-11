@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ sidebarOpen: false, darkMode: JSON.parse(localStorage.getItem('darkMode') || 'false') }" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', JSON.stringify(val)))" :class="{ 'dark': darkMode }" class="h-full">
+<html lang="en" x-data="{ sidebarOpen: false }" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $title . ' - ' . config('app.name') ?? 'Page Title' }}</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
@@ -18,8 +19,8 @@
         @include('components._partials.sidebar')
 
         <!-- Overlay -->
-        <div x-show="sidebarOpen" @click="sidebarOpen = false"
-            class="fixed inset-0 bg-black bg-opacity-50 z-20 sm:hidden" x-transition.opacity>
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black bg-opacity-50 z-20 sm:hidden"
+            x-transition.opacity>
         </div>
 
         <!-- Main content -->
@@ -39,6 +40,9 @@
     </div>
 
     @livewireScripts
+
+    @include('components._partials.scripts')
+    @stack('scripts')
 
 </body>
 
