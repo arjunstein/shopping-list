@@ -12,6 +12,7 @@ class ListCategory extends Component
     use WithPagination;
 
     #[Title('List Category')]
+    public $search = '';
     public $perPage = 10;
     protected $categoryRepository;
 
@@ -22,7 +23,13 @@ class ListCategory extends Component
 
     public function render()
     {
-        $categories = $this->categoryRepository->getAllCategories($this->perPage);
+        $categories = $this->categoryRepository->searchCategories($this->search, $this->perPage);
+
+        if ($this->search) {
+            $categories = $this->categoryRepository->searchCategories($this->search, $this->perPage);
+        } else {
+            $categories = $this->categoryRepository->getAllCategories($this->perPage);
+        }
 
         return view('livewire.category.list-category', [
             'title' => 'List Category',
@@ -33,6 +40,16 @@ class ListCategory extends Component
     public function deleteCategory($id)
     {
         $this->categoryRepository->deleteCategory($id);
-        session()->flash('message', 'Category deleted successfully.');
+        $this->dispatch('show-alert', message: 'Category deleted successfully!');
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
     }
 }

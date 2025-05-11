@@ -36,7 +36,7 @@ class CreateCategory extends Component
             'image' => $this->image,
         ]);
 
-        session()->flash('message', 'Category created successfully.');
+        session()->flash('success', 'Category created successfully.');
         return $this->redirect(route('category'), navigate: true);
     }
 }

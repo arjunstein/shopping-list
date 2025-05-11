@@ -30,6 +30,8 @@
             <!-- Page content -->
             <main class="flex-1 overflow-y-auto p-6">
 
+                @include('components._partials.alerts')
+
                 {{ $slot }}
 
             </main>
@@ -37,6 +39,7 @@
     </div>
 
     @livewireScripts
+
 </body>
 
 </html>
