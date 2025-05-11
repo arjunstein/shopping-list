@@ -36,7 +36,8 @@
                         <tr>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $i + 1 }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
-                                <img src="https://i.pravatar.cc/50" class="w-8 h-8 rounded-full" alt="User avatar">
+                                <img src="{{ $category->image ? asset('storage/categories/' . $category->image) : 'https://i.pravatar.cc/50' }}"
+                                    class="w-10 h-10 rounded-full" alt="{{ $category->name }}">
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
@@ -119,7 +120,7 @@
                                     <label
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
                                     <div class="flex items-center justify-center">
-                                        <img src="https://i.pravatar.cc/500" alt="category"
+                                        <img src="{{ $selectedCategory->image ? asset('storage/categories/' . $selectedCategory->image) : 'https://i.pravatar.cc/500' }}" alt="{{ $selectedCategory->name }}"
                                             class="w-20 h-20 rounded-lg">
                                     </div>
                                 </div>
