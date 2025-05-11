@@ -11,4 +11,5 @@ interface CategoryRepository extends Repository
     public function getCategoryById($id);
     public function updateCategory($id, array $data);
     public function deleteCategory($id);
+    public function searchCategories($search, $perPage);
 }

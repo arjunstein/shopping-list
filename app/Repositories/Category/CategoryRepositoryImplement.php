@@ -73,4 +73,12 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         $category = $this->getCategoryById($id);
         return $category->delete();
     }
+
+    public function searchCategories($search, $perPage)
+    {
+        return $this->model->where('name', 'like', '%' . $search . '%')
+            ->orWhere('description', 'like', '%' . $search . '%')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
 }
