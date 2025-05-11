@@ -16,6 +16,8 @@ class ListCategory extends Component
     public $perPage = 10;
     public $selectedCategory = null;
     public $showModal = false;
+    public $showDeleteModal = false;
+    public $deleteId = null;
     protected $categoryRepository;
 
     public function boot(CategoryRepository $categoryRepository)
@@ -42,6 +44,7 @@ class ListCategory extends Component
     public function deleteCategory($id)
     {
         $this->categoryRepository->deleteCategory($id);
+        $this->showDeleteModal = false;
         $this->dispatch('show-alert', message: 'Category deleted successfully!');
     }
 
@@ -59,5 +62,11 @@ class ListCategory extends Component
     {
         $this->selectedCategory = $this->categoryRepository->getCategoryById($category_id);
         $this->showModal = true;
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
     }
 }
