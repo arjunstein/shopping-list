@@ -39,7 +39,7 @@
                                 <img src="{{ $category->image ? asset('storage/categories/' . $category->image) : 'https://i.pravatar.cc/50' }}"
                                     class="w-10 h-10 rounded-full" alt="{{ $category->name }}">
                             </td>
-                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100 whitespace-nowrap">{{ $category->name }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {{ $category->description ? $category->description : '-' }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $category->created_at }}</td>
