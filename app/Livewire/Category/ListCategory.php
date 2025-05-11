@@ -40,7 +40,7 @@ class ListCategory extends Component
     public function deleteCategory($id)
     {
         $this->categoryRepository->deleteCategory($id);
-        session()->flash('message', 'Category deleted successfully.');
+        $this->dispatch('show-alert', message: 'Category deleted successfully!');
     }
 
     public function updatingSearch()

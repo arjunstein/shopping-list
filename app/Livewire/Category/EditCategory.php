@@ -39,7 +39,7 @@ class EditCategory extends Component
             'image' => $this->image,
         ]);
 
-        session()->flash('message', 'Category updated successfully.');
+        session()->flash('success', 'Category updated successfully.');
         return $this->redirect(route('category'), navigate: true);
     }
 
