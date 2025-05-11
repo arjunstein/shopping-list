@@ -83,7 +83,7 @@
                 </tbody>
             </table>
         </div>
-        <div>
+        <div class="mt-4">
             {{ $categories->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
