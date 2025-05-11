@@ -14,6 +14,8 @@ class ListCategory extends Component
     #[Title('List Category')]
     public $search = '';
     public $perPage = 10;
+    public $selectedCategory = null;
+    public $showModal = false;
     protected $categoryRepository;
 
     public function boot(CategoryRepository $categoryRepository)
@@ -51,5 +53,11 @@ class ListCategory extends Component
     public function updatingPerPage()
     {
         $this->resetPage();
+    }
+
+    public function showDetailCategory($category_id)
+    {
+        $this->selectedCategory = $this->categoryRepository->getCategoryById($category_id);
+        $this->showModal = true;
     }
 }
