@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->string('name')->unique();
+            $table->string('item_name')->unique();
             $table->boolean('is_checked')->default(false);
             $table->softDeletes();
             $table->string('image')->nullable();

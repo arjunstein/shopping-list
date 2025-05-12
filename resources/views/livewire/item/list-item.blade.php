@@ -3,13 +3,13 @@
         <h2 class="text-lg font-semibold">{{ $title ?? 'Page title' }}</h2>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between my-4 gap-4">
             <form class="w-full sm:w-auto">
-                <input type="search" wire:model.live="search" placeholder="Search category..." autocomplete="off"
+                <input type="search" wire:model.live="search" placeholder="Search item..." autocomplete="off"
                     class="w-full sm:w-96 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </form>
 
-            <a href="{{ route('category-create') }}" wire:navigate
+            <a href="{{ route('item-create') }}" wire:navigate
                 class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">Add
-                Category
+                Item
             </a>
         </div>
 
@@ -28,28 +28,34 @@
                             Category</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
-                            Description</th>
+                            Item name</th>
+                        <th
+                            class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
+                            Created at</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse ($categories as $i => $category)
+                    @forelse ($items as $i => $item)
                         <tr>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $i + 1 }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                <img src="{{ $category->image ? asset('storage/categories/' . $category->image) : 'https://i.pravatar.cc/50' }}"
-                                    class="w-10 h-10 rounded-full" alt="{{ $category->name }}">
+                                <img src="{{ $item->image ? asset('storage/items/' . $item->image) : 'https://i.pravatar.cc/50' }}"
+                                    class="w-10 h-10 rounded-full" alt="{{ $item->category->name }}">
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                                {{ $category->name }}</td>
+                                {{ $item->category->name }}
+                            </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {{ $category->description ? $category->description : '-' }}</td>
+                                {{ $item->item_name }}</td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {{ $item->created_at->format('d-M-Y H:i') }}</td>
                             <td class="px-4 py-3 space-x-2 flex">
-                                <button type="button" data-modal-target="showCategory" data-modal-toggle="showCategory"
-                                    wire:click="showDetailCategory('{{ $category->id }}')"
+                                <button type="button" data-modal-target="showItem" data-modal-toggle="showItem"
+                                    wire:click="showDetailItem('{{ $item->id }}')"
                                     class="w-10 h-10 inline-flex justify-center items-center bg-purple-600 text-white rounded hover:bg-purple-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +66,7 @@
                                     </svg>
                                 </button>
 
-                                <a href="{{ route('category-edit', $category->id) }}" wire:navigate title="Edit"
+                                <a href="{{ route('item-edit', $item->id) }}" wire:navigate title="Edit"
                                     class="w-10 h-10 inline-flex justify-center items-center bg-green-600 text-white rounded hover:bg-green-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -69,7 +75,7 @@
                                     </svg>
                                 </a>
 
-                                <button wire:click="confirmDelete('{{ $category->id }}')" title="Delete"
+                                <button wire:click="confirmDeleteItem('{{ $item->id }}')" title="Delete"
                                     class="w-10 h-10 inline-flex justify-center items-center bg-red-600 text-white rounded hover:bg-red-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -83,7 +89,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Category
+                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Item
                                 not found.</td>
                         </tr>
                     @endforelse
@@ -91,13 +97,13 @@
             </table>
         </div>
         <div class="mt-4">
-            {{ $categories->links(data: ['scrollTo' => false]) }}
+            {{ $items->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
 
-    <!-- Main modal detail category -->
+    <!-- Main modal detail item -->
     <div>
-        <div x-cloak x-show="$wire.showModal" x-transition id="showCategory"
+        <div x-cloak x-show="$wire.showModalDetailItem" x-transition id="showItem"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black bg-opacity-50">
             <div class="relative w-full max-w-md max-h-full">
                 <!-- Modal content -->
@@ -105,9 +111,9 @@
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            {{ $showTitle ?? 'Category Details' }}
+                            {{ $showTitle ?? 'Item Details' }}
                         </h3>
-                        <button type="button" @click="$wire.showModal = false"
+                        <button type="button" @click="$wire.showModalDetailItem = false"
                             class="bg-red-500 text-white hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
@@ -119,14 +125,14 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 md:p-5">
-                        @if ($selectedCategory)
+                        @if ($selectedItem)
                             <div class="grid gap-4 mb-4 grid-cols-2">
                                 <div class="col-span-2">
                                     <label
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
                                     <div class="flex items-center justify-center">
-                                        <img src="{{ $selectedCategory->image ? asset('storage/categories/' . $selectedCategory->image) : 'https://i.pravatar.cc/500' }}"
-                                            alt="{{ $selectedCategory->name }}" class="w-20 h-20 rounded-lg">
+                                        <img src="{{ $selectedItem->image ? asset('storage/items/' . $selectedItem->image) : 'https://i.pravatar.cc/500' }}"
+                                            alt="{{ $selectedItem->name }}" class="w-20 h-20 rounded-lg">
                                     </div>
                                 </div>
                                 <div class="col-span-2">
@@ -134,15 +140,15 @@
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                                     <div
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                        {{ $selectedCategory->name }}
+                                        {{ $selectedItem->category->name }}
                                     </div>
                                 </div>
                                 <div class="col-span-2">
                                     <label
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item</label>
                                     <div
                                         class="bg-gray-50 border h-auto border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                        {{ $selectedCategory->description ? $selectedCategory->description : '-' }}
+                                        {{ $selectedItem->item_name }}
                                     </div>
                                 </div>
                                 <div class="col-span-2">
@@ -150,7 +156,7 @@
                                         At</label>
                                     <div
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                        {{ $selectedCategory->created_at->format('d M Y H:i') }}
+                                        {{ $selectedItem->created_at->format('d M Y H:i') }}
                                     </div>
                                 </div>
                                 <div class="col-span-2">
@@ -158,7 +164,7 @@
                                         At</label>
                                     <div
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                        {{ $selectedCategory->updated_at->format('d M Y H:i') }}
+                                        {{ $selectedItem->updated_at->format('d M Y H:i') }}
                                     </div>
                                 </div>
                             </div>
@@ -168,10 +174,10 @@
             </div>
         </div>
     </div>
-    <!-- End Main modal detail category -->
+    <!-- End Main modal detail item -->
 
     <!-- Modal delete confirmation -->
-    <div x-cloak x-show="$wire.showDeleteModal" x-transition
+    <div x-cloak x-show="$wire.showModalConfirmDeleteItem" x-transition
         class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black bg-opacity-50">
         <div class="bg-white rounded-lg shadow dark:bg-gray-700 w-full max-w-md">
             <!-- Modal Header -->
@@ -191,11 +197,11 @@
             </div>
             <!-- Modal Footer -->
             <div class="flex items-center justify-center gap-3 px-4 py-4">
-                <button @click="$wire.showDeleteModal = false"
+                <button @click="$wire.showModalConfirmDeleteItem = false"
                     class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-500">
                     Cancel
                 </button>
-                <button wire:click="deleteCategory('{{ $deleteId }}')"
+                <button wire:click="deleteItem('{{ $deleteItemId }}')"
                     class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
                     Yes, Delete
                 </button>
@@ -203,5 +209,4 @@
         </div>
     </div>
     <!-- End Modal delete confirmation -->
-
 </div>

@@ -12,7 +12,8 @@ class Item extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'name',
+        'item_name',
+        'category_id',
         'is_checked',
         'image',
     ];
