@@ -33,6 +33,17 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         return $this->categoryModel->orderBy('name', 'asc')->get();
     }
 
+    public function searchItem($search, $perPage)
+    {
+        return $this->model->with('category')
+            ->where('item_name', 'like', '%' . $search . '%')
+            ->orWhereHas('category', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
     public function createItem(array $data)
     {
         // Validate the data
