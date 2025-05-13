@@ -12,6 +12,7 @@ class ListItem extends Component
     use WithPagination;
 
     #[Title('List Item')]
+    public $search = '';
     public $perPage = 10;
     public $selectedItem = null;
     public $showModalDetailItem = false;
@@ -27,7 +28,11 @@ class ListItem extends Component
 
     public function render()
     {
-        $items = $this->itemRepsository->getAllItems($this->perPage);
+        if ($this->search) {
+            $items = $this->itemRepsository->searchItem($this->search, $this->perPage);
+        } else {
+            $items = $this->itemRepsository->getAllItems($this->perPage);
+        }
 
         return view('livewire.item.list-item', [
             'title' => 'List Item',
