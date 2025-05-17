@@ -68,9 +68,13 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         $this->_validate($data);
 
         $category = $this->getCategoryById($id);
-        $category->update($data);
 
-        return $category;
+        // Handle image upload if present
+        if (isset($data['image'])) {
+            $data['image'] = $this->_saveImage($data['image']);
+        }
+
+        return $category->update($data);
     }
 
     public function deleteCategory($id)
