@@ -6,9 +6,12 @@ use App\Repositories\Item\ItemRepository;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateItem extends Component
 {
+    use WithFileUploads;
+
     #[Title('Create Item')]
     public $item_name;
     public $category_id;
