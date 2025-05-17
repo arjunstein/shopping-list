@@ -33,6 +33,36 @@
         </button>
         <!-- end dark mode toggle -->
 
-        <img src="https://i.pravatar.cc/40" class="w-8 h-8 rounded-full" alt="User avatar">
+        <!-- User Avatar with Dropdown -->
+        <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" class="focus:outline-none">
+                <img src="https://i.pravatar.cc/40" class="w-8 h-8 rounded-full" alt="User avatar">
+            </button>
+
+            <div x-show="open" @click.away="open = false"
+                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 py-1 ring-1 ring-black ring-opacity-5">
+
+                <!-- Email and Username -->
+                <div class="px-4 py-2 border-b dark:border-gray-600">
+                    <div class="font-semibold text-gray-800 dark:text-white">{{ Auth::user()->name ?? 'test' }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">{{ Auth::user()->email ?? 'test@email.com' }}
+                    </div>
+                </div>
+
+                <a href="#"
+                    class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    Profile
+                </a>
+
+                @livewire('auth.logout')
+
+            </div>
+        </div>
+        <!-- End dropdown -->
     </div>
 </header>
