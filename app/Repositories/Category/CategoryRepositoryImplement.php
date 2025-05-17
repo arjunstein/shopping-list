@@ -71,6 +71,10 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
 
         // Handle image upload if present
         if (isset($data['image'])) {
+            // delete old image when upload new image
+            if ($category->image) {
+                $this->_deleteImage($category->image);
+            }
             $data['image'] = $this->_saveImage($data['image']);
         }
 
