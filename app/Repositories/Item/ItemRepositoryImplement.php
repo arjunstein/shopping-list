@@ -49,6 +49,11 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         // Validate the data
         $this->_validate($data);
 
+        // handle image upload if present
+        if (isset($data['image'])) {
+            $data['image'] = $this->_saveImage($data['image']);
+        }
+        // create item
         return $this->model->create($data);
     }
 
@@ -85,16 +90,55 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         $this->_validate($data);
 
         $item = $this->getItemById($id);
-        $item->update($data);
 
-        return $item;
+        // handle image upload if present
+        if (isset($data['image'])) {
+            // delete old image when upload new image
+            if ($item->image) {
+                $this->_deleteImage($item->image);
+            }
+            $data['image'] = $this->_saveImage($data['image']);
+        }
+        // update data
+        return $item->update($data);
     }
 
     public function deleteItem($id)
     {
         $item = $this->getItemById($id);
-        $item->delete();
 
-        return $item;
+        // Delete the image in storage if it exists
+        if ($item->image) {
+            $this->_deleteImage($item->image);
+        }
+
+        return $item->delete();
+    }
+
+    /**
+     * Save the image to storage
+     *
+     * @param \Illuminate\Http\UploadedFile $image
+     * @return string
+     */
+    private function _saveImage($image)
+    {
+        $imageName = 'item-' . date('dmYHis') . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('items', $imageName, 'public');
+        return $imageName;
+    }
+
+    /**
+     * Delete the image from storage
+     *
+     * @param string $image
+     * @return void
+     */
+
+    private function _deleteImage($image)
+    {
+        if (file_exists(public_path('storage/items/' . $image))) {
+            unlink(public_path('storage/items/' . $image));
+        }
     }
 }

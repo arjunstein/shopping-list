@@ -6,9 +6,12 @@ use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditCategory extends Component
 {
+    use WithFileUploads;
+
     #[Title('Edit Category')]
     public $category_id;
     public $name;

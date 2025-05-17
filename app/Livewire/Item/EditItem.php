@@ -5,9 +5,12 @@ namespace App\Livewire\Item;
 use App\Repositories\Item\ItemRepository;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditItem extends Component
 {
+    use WithFileUploads;
+
     #[Title('Edit Item')]
     public $item_id;
     public $item_name;
