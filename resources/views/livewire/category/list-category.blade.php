@@ -97,7 +97,7 @@
 
     <!-- Main modal detail category -->
     <div>
-        <div x-cloak x-show="$wire.showModal" x-transition id="showCategory"
+        <div x-cloak x-show="$wire.showModal" x-transition id="showCategory" @click.self="$wire.showModal = false"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black bg-opacity-50">
             <div class="relative w-full max-w-md max-h-full">
                 <!-- Modal content -->

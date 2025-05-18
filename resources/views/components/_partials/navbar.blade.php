@@ -9,7 +9,7 @@
     </div>
     <div class="flex items-center space-x-4">
         <!-- Toggle dark mode -->
-        <button x-data="{ dark: document.documentElement.classList.contains('dark') }"
+        <button x-cloak x-data="{ dark: document.documentElement.classList.contains('dark') }"
             @click="
     dark = !dark;
     document.documentElement.classList.toggle('dark', dark);
@@ -39,7 +39,7 @@
                 <img src="https://i.pravatar.cc/40" class="w-8 h-8 rounded-full" alt="User avatar">
             </button>
 
-            <div x-show="open" @click.away="open = false"
+            <div x-show="open" x-cloak @click.away="open = false"
                 class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 py-1 ring-1 ring-black ring-opacity-5">
 
                 <!-- Email and Username -->

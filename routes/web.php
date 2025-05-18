@@ -8,6 +8,7 @@ use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Item\CreateItem;
 use App\Livewire\Item\EditItem;
 use App\Livewire\Item\ListItem;
+use App\Livewire\ShopListNow;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,5 +27,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/item/create', CreateItem::class)->name('item-create');
     Route::get('/item/edit/{id}', EditItem::class)->name('item-edit');
 
-    Route::get('')->name('shop-list');
+    Route::get('/shop-list-now', ShopListNow::class)->name('shop-list-now');
 });

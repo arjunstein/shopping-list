@@ -3,11 +3,11 @@
     <div class="h-16 flex items-center justify-center dark:border-gray-700">
         <span class="text-lg font-bold">{{ config('app.name') }}</span>
     </div>
-    <nav class="mt-2 px-4">
+    <nav class="mt-2 pr-4">
         <a href="{{ route('dashboard') }}" wire:navigate
-            class="flex items-center px-4 py-2 rounded transition
+            class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('dashboard')
-            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white'
+            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
             : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
             <svg class="h-5 w-5 mr-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -16,9 +16,9 @@
             Dashboard
         </a>
         <a href="{{ route('category') }}" wire:navigate
-            class="flex items-center px-4 py-2 rounded transition
+            class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('category*')
-            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white'
+            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
             : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
             <svg class="h-5 w-5 mr-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -27,9 +27,9 @@
             Categories
         </a>
         <a href="{{ route('item') }}" wire:navigate
-            class="flex items-center px-4 py-2 rounded transition
+            class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('item*')
-            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white'
+            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
             : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-5 mr-4">
@@ -38,10 +38,10 @@
             </svg>
             Items
         </a>
-        <a href="#" wire:navigate
-            class="flex items-center px-4 py-2 rounded transition
-        {{ request()->routeIs('item*')
-            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white'
+        <a href="{{ route('shop-list-now') }}" wire:navigate
+            class="flex items-center px-4 py-2 rounded-r transition
+        {{ request()->routeIs('shop-list-now')
+            ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
             : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-5 mr-4">
