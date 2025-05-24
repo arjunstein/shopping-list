@@ -37,8 +37,8 @@ class EditCategory extends Component
     public function editCategory()
     {
         $this->categoryRepository->updateCategory($this->category_id, [
-            'name' => Str::title($this->name),
-            'description' => Str::ucfirst($this->description),
+            'name' => $this->name,
+            'description' => $this->description,
             'image' => $this->image,
         ]);
 

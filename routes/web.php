@@ -8,15 +8,13 @@ use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Item\CreateItem;
 use App\Livewire\Item\EditItem;
 use App\Livewire\Item\ListItem;
+use App\Livewire\Landing;
 use App\Livewire\ShopListNow;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', Landing::class)->name('landing');
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/auth/login', Login::class)->name('login');
+Route::get('/auth/login', Login::class)->name('login')->middleware('guest');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');

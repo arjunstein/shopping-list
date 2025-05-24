@@ -39,4 +39,12 @@ class Item extends Model
     {
         return $this->hasOne(Selected::class);
     }
+
+    // Set rule for some attributes when saving & updating
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            $model->item_name = Str::title($model->item_name);
+        });
+    }
 }
