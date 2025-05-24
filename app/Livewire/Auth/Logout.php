@@ -22,6 +22,6 @@ class Logout extends Component
     public function signOut()
     {
         $this->authRepository->logout();
-        return $this->redirect(route('login'), navigate: true);
+        return $this->redirect(route('landing'), navigate: true);
     }
 }
