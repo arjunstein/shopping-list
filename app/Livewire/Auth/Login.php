@@ -36,7 +36,10 @@ class Login extends Component
 
         try {
             $this->authRepository->login($this->username, $this->password, $this->remember);
-            return $this->redirect(route('dashboard'), navigate: true);
+
+            $intendedUrl = session()->pull('url.intended', route('dashboard'));
+
+            return $this->redirect($intendedUrl, navigate: true);
         } catch (\Throwable $e) {
             $this->addError('username', $e->getMessage());
         }
