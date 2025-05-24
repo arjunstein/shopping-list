@@ -1,7 +1,7 @@
 <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg sm:translate-x-0 sm:static sm:inset-0">
     <div class="h-16 flex items-center justify-center dark:border-gray-700">
-        <span class="text-lg font-bold">{{ config('app.name') }}</span>
+        <a href="/" wire:navigate><span class="text-lg font-bold">{{ config('app.name') }}</span></a>
     </div>
     <nav class="mt-2 pr-4">
         <a href="{{ route('dashboard') }}" wire:navigate @click="sidebarOpen = false"
