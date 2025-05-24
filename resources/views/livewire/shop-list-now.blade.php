@@ -7,17 +7,20 @@
             @endphp
             <div class="mb-4 grid gap-2 {{ $isTwoColumns ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1' }}">
                 @foreach ($allItems as $item)
-                    <div class="flex items-center">
+                    <div class="flex items-start space-x-2 mb-2">
                         <input type="checkbox" id="item-{{ $item->id }}" value="{{ $item->id }}"
                             wire:model="selectedItems"
-                            class="mr-2 rounded border-gray-300 text-blue-600 shadow-sm focus:ring focus:ring-blue-200">
-                        <label for="item-{{ $item->id }}">{{ $item->item_name }} - {{ $item->category->name }}</label>
+                            class="mt-0.5 flex-shrink-0 rounded border-gray-300 text-blue-600 shadow-sm focus:ring focus:ring-blue-200">
+
+                        <label for="item-{{ $item->id }}" class="leading-tight">
+                            {{ $item->item_name }} - {{ $item->category->name }}
+                        </label>
                     </div>
                 @endforeach
             </div>
             <button type="submit"
                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
-                Submit
+                Done
             </button>
         </form>
     </div>
