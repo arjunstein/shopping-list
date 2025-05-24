@@ -26,7 +26,7 @@ class CreateItem extends Component
     public function saveItem()
     {
         $this->itemRepository->createItem([
-            'item_name' => Str::title($this->item_name),
+            'item_name' => $this->item_name,
             'category_id' => $this->category_id,
             'image' => $this->image,
         ]);

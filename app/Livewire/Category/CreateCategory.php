@@ -34,8 +34,8 @@ class CreateCategory extends Component
     public function saveCategory()
     {
         $this->categoryRepository->createCategory([
-            'name' => Str::title($this->name),
-            'description' => Str::ucfirst($this->description),
+            'name' => $this->name,
+            'description' => $this->description,
             'image' => $this->image,
         ]);
 

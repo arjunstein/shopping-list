@@ -32,4 +32,13 @@ class Category extends Model
     {
         return $this->hasMany(Item::class);
     }
+
+    // Set rule for some attributes when saving & updating
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            $model->name = Str::title($model->name);
+            $model->description = ucfirst($model->description);
+        });
+    }
 }
