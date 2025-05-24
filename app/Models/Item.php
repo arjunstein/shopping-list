@@ -14,7 +14,6 @@ class Item extends Model
     protected $fillable = [
         'item_name',
         'category_id',
-        'is_checked',
         'image',
     ];
 
@@ -34,5 +33,10 @@ class Item extends Model
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = Str::uuid()->toString();
         });
+    }
+
+    public function selected()
+    {
+        return $this->hasOne(Selected::class);
     }
 }

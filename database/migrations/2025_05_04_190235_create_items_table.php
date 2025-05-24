@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete();
             $table->string('item_name')->unique();
-            $table->boolean('is_checked')->default(false);
             $table->softDeletes();
             $table->string('image')->nullable();
             $table->timestamps();
