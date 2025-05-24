@@ -4,7 +4,7 @@
         <span class="text-lg font-bold">{{ config('app.name') }}</span>
     </div>
     <nav class="mt-2 pr-4">
-        <a href="{{ route('dashboard') }}" wire:navigate
+        <a href="{{ route('dashboard') }}" wire:navigate @click="sidebarOpen = false"
             class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('dashboard')
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
@@ -15,7 +15,7 @@
             </svg>
             Dashboard
         </a>
-        <a href="{{ route('category') }}" wire:navigate
+        <a href="{{ route('category') }}" wire:navigate @click="sidebarOpen = false"
             class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('category*')
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
@@ -26,7 +26,7 @@
             </svg>
             Categories
         </a>
-        <a href="{{ route('item') }}" wire:navigate
+        <a href="{{ route('item') }}" wire:navigate @click="sidebarOpen = false"
             class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('item*')
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'
@@ -38,7 +38,7 @@
             </svg>
             Items
         </a>
-        <a href="{{ route('shop-list-now') }}" wire:navigate
+        <a href="{{ route('shop-list-now') }}" wire:navigate @click="sidebarOpen = false"
             class="flex items-center px-4 py-2 rounded-r transition
         {{ request()->routeIs('shop-list-now')
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border-l-4 border-blue-500'

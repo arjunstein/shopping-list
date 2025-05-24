@@ -51,6 +51,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function selected()
+    {
+        return $this->hasMany(Selected::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
