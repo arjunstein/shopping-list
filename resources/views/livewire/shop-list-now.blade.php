@@ -17,11 +17,18 @@
                         </label>
                     </div>
                 @endforeach
+                @error('selectedItems')
+                    <p class="text-center text-red-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
-            <button type="submit"
-                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
-                Done
-            </button>
+            <div class="flex justify-center">
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
+                    Done
+                </button>
+            </div>
         </form>
     </div>
 </div>

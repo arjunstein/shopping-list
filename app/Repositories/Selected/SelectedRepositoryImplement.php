@@ -32,6 +32,9 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
     public function saveSelectedItems(array $itemIds, $userId)
     {
+        // Validate the input data
+        $this->_validate(['selectedItems' => $itemIds]);
+
         $selectedItems = [];
         foreach ($itemIds as $itemId) {
             $selectedItems[] = [
@@ -45,5 +48,21 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
         // Insert new selected items
         return $this->model->insert($selectedItems);
+    }
+
+    // validate
+
+    private function _validate(array $data)
+    {
+        $rules = [
+            'selectedItems' => 'required|array',
+        ];
+
+        $messages = [
+            'selectedItems.required' => 'You must select at least one item.',
+            'selectedItems.array' => 'Selected items must be an array.',
+        ];
+
+        return validator($data, $rules, $messages)->validate();
     }
 }
