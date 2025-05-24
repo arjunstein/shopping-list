@@ -1,7 +1,7 @@
 <header
     class="h-16 bg-white dark:bg-gray-800 flex items-center justify-between px-6 shadow-sm z-10 relative border-b dark:border-gray-700">
     <div class="flex items-center space-x-4">
-        <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 dark:text-gray-300 focus:outline-none sm:hidden">
+        <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 dark:text-gray-300 focus:outline-none lg:hidden">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
