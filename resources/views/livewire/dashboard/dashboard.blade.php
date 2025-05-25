@@ -55,7 +55,6 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
 <script>
     document.addEventListener('livewire:navigated', function() {
         const chartDom = document.getElementById('item-chart');
