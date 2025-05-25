@@ -53,7 +53,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('livewire:navigated', function() {
         const chartDom = document.getElementById('item-chart');
         const myChart = echarts.init(chartDom);
 
