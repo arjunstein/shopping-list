@@ -45,4 +45,62 @@
             </div>
         </div>
     </div>
+    <div class="bg-white dark:bg-gray-800 mt-8 p-6 rounded-lg shadow">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Shop list {{ date('Y') }}</h2>
+        <div id="item-chart" style="height: 400px;"></div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chartDom = document.getElementById('item-chart');
+        const myChart = echarts.init(chartDom);
+
+        const option = {
+            title: {
+                text: 'Items Per Month',
+                left: 'center',
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ],
+                axisTick: {
+                    alignWithLabel: true
+                },
+                axisLabel: {
+                    rotate: 30
+                }
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+                name: 'Items',
+                type: 'bar',
+                data: [5, 7, 3, 2.2, 4, 2, 4.5, 5, 6, 3.8, 8, 3],
+                itemStyle: {
+                    color: '#4263f5'
+                }
+            }]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    });
+</script>
