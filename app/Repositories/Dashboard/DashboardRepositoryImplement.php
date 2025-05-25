@@ -4,6 +4,7 @@ namespace App\Repositories\Dashboard;
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\Selected;
 use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\User;
 
@@ -39,5 +40,38 @@ class DashboardRepositoryImplement extends Eloquent implements DashboardReposito
     public function countItems(): int
     {
         return $this->item->count();
+    }
+
+    public function countMonthlyItems(): array
+    {
+        $currentYear = now()->year;
+        $currentMonth = now()->month;
+
+        $counts = Selected::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', '<=', $currentMonth)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $monthlyCounts = [];
+        foreach (range(1, $currentMonth) as $month) {
+            $monthlyCounts[] = $counts[$month] ?? 0;
+        }
+
+        return $monthlyCounts;
+    }
+
+    public function getMonthLabels(): array
+    {
+        $currentMonth = now()->month;
+        $labels = [];
+
+        foreach (range(1, $currentMonth) as $month) {
+            $labels[] = now()->month($month)->format('F');
+        }
+
+        return $labels;
     }
 }

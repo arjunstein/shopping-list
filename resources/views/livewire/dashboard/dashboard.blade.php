@@ -45,16 +45,30 @@
             </div>
         </div>
     </div>
+
+    {{-- Chart --}}
     <div class="bg-white dark:bg-gray-800 mt-8 p-6 rounded-lg shadow">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Shop list {{ date('Y') }}</h2>
         <div id="item-chart" style="height: 400px;"></div>
     </div>
+    {{-- End chart --}}
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('livewire:navigated', function() {
         const chartDom = document.getElementById('item-chart');
+        const monthlyItems = @json($monthlyItems);
+        const monthlyLabels = @json($monthLabels);
+
+        if (!chartDom) return; // Mencegah error jika chart tidak ada
+
+        // Cek jika ada instance lama, destroy dulu
+        if (echarts.getInstanceByDom(chartDom)) {
+            echarts.dispose(chartDom);
+        }
+
         const myChart = echarts.init(chartDom);
 
         const option = {
@@ -76,15 +90,12 @@
             },
             xAxis: {
                 type: 'category',
-                data: [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ],
+                data: monthlyLabels,
                 axisTick: {
                     alignWithLabel: true
                 },
                 axisLabel: {
-                    rotate: 30
+                    rotate: 40
                 }
             },
             yAxis: {
@@ -93,7 +104,7 @@
             series: [{
                 name: 'Items',
                 type: 'bar',
-                data: [5, 7, 3, 2.2, 4, 2, 4.5, 5, 6, 3.8, 8, 3],
+                data: monthlyItems,
                 itemStyle: {
                     color: '#4263f5'
                 }
@@ -101,6 +112,9 @@
         };
 
         myChart.setOption(option);
-        window.addEventListener('resize', myChart.resize);
+
+        window.addEventListener('resize', () => {
+            myChart.resize();
+        });
     });
 </script>
