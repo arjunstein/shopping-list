@@ -27,7 +27,9 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
     public function getAllItems()
     {
-        return $this->item->get();
+        return $this->item->with('category')
+            ->orderBy('item_name', 'asc')
+            ->get();
     }
 
     public function saveSelectedItems(array $itemIds, $userId)
