@@ -27,10 +27,21 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
     public function getAllItems()
     {
-        return $this->item->with('category')
-            ->orderBy('item_name', 'asc')
-            ->get();
+        $today = now();
+
+        // range date
+        $startDate = now()->startOfMonth()->setDay(27)->startOfDay();
+        $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
+
+        if ($today->between($startDate, $endDate)) {
+            return $this->item->with('category')
+                ->orderBy('item_name', 'asc')
+                ->get();
+        }
+
+        return collect([]);
     }
+
 
     public function saveSelectedItems(array $itemIds, $userId)
     {
