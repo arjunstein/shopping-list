@@ -22,21 +22,25 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
 
     private function _validate(array $data)
     {
-        return validator($data, [
+        $rules = [
             'name' => 'required|regex:/^[a-zA-Z0-9\s]+$/|max:50',
-            'description' => 'nullable|regex:/^[a-zA-Z0-9\s]+$/|max:100',
+            'description' => 'nullable|regex:/^[a-zA-Z0-9\s,]+$/|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
-        ])->validate();
+        ];
 
         // create custom validation messages
-        return [
+        $messages = [
             'name.required' => 'The category field is required.',
             'name.max' => 'The category may not be greater than 50 characters.',
+            'name.regex' => 'The category may only contain letters, numbers, and spaces.',
+            'description.regex' => 'The description may only contain letters, numbers, spaces, and commas.',
             'description.max' => 'The description may not be greater than 100 characters.',
             'image.image' => 'The image must be an image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg.',
             'image.max' => 'The image may not be greater than 512 kilobytes.',
         ];
+
+        return validator($data, $rules, $messages)->validate();
     }
 
     public function getAllCategories($perPage)
