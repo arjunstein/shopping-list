@@ -22,6 +22,12 @@ class ShopListNow extends Component
 
     public function saveItems()
     {
+        // Check if the user has already submitted items this month
+        if ($this->selectedRepository->hasSubmittedItemsThisMonth(Auth::user()->id)) {
+            $this->dispatch('error', message: 'You have already submitted your items this month.');
+            return;
+        }
+
         $this->selectedRepository->saveSelectedItems($this->selectedItems, Auth::user()->id);
 
         // flash message

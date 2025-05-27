@@ -30,7 +30,7 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         $today = now();
 
         // range date
-        $startDate = now()->startOfMonth()->setDay(27)->startOfDay();
+        $startDate = now()->startOfMonth()->setDay(25)->startOfDay();
         $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
 
         if ($today->between($startDate, $endDate)) {
@@ -42,6 +42,15 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         return collect([]);
     }
 
+    public function hasSubmittedItemsThisMonth($userId)
+    {
+        $startDate = now()->startOfMonth()->setDay(25)->startOfDay();
+        $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
+
+        return $this->model->where('user_id', $userId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->exists();
+    }
 
     public function saveSelectedItems(array $itemIds, $userId)
     {
