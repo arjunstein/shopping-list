@@ -8,4 +8,5 @@ interface SelectedRepository extends Repository
 {
     public function getAllItems();
     public function saveSelectedItems(array $itemIds, $userId);
+    public function hasSubmittedItemsThisMonth($userId);
 }
