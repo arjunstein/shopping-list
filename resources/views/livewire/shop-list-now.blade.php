@@ -7,12 +7,14 @@
             @endphp
             <div class="mb-3 grid gap-2 {{ $isTwoColumns ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1' }}">
                 @forelse ($allItems as $item)
-                    <div class="flex items-start space-x-2 mb-2">
-                        <input type="checkbox" id="item-{{ $item->id }}" value="{{ $item->id }}"
-                            wire:model="selectedItems"
+                    <div x-data="{ selectedItems: @entangle('selectedItems') }" class="flex items-start space-x-2 mb-2">
+                        <input type="checkbox" id="item-{{ $item->id }}" :value="'{{ $item->id }}'"
+                            x-model="selectedItems"
                             class="mt-0.5 flex-shrink-0 rounded border-gray-300 text-blue-600 shadow-sm focus:ring focus:ring-blue-200">
 
-                        <label for="item-{{ $item->id }}" class="leading-tight">
+                        <label for="item-{{ $item->id }}"
+                            :class="selectedItems.includes('{{ $item->id }}') ? 'line-through text-gray-400' : ''"
+                            class="leading-tight transition duration-150">
                             {{ $item->item_name }} - {{ $item->category->name }}
                         </label>
                     </div>
