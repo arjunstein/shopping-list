@@ -26,7 +26,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
 
     public function getAllItems($perPage)
     {
-        $cacheKey = "all_items";
+        $currentPage = request('page', 1);
+        $cacheKey = "all_items_page_{$currentPage}_perpage_{$perPage}";
 
         return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($perPage) {
             return $this->model
@@ -57,8 +58,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         // Validate the data
         $this->_validate($data);
 
-        Cache::forget("all_items");
-        Cache::forget("item_count");
+        $this->_clearItemCache();
 
         // handle image upload if present
         if (isset($data['image'])) {
@@ -113,7 +113,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         // Validate the data
         $this->_validate($data, $id);
 
-        Cache::forget("all_items");
+        $this->_clearItemCache();
 
         $item = $this->getItemById($id);
 
@@ -133,8 +133,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     {
         $item = $this->getItemById($id);
 
-        Cache::forget("all_items");
-        Cache::forget("item_count");
+        $this->_clearItemCache();
 
         // Delete the image in storage if it exists
         if ($item->image) {
@@ -169,5 +168,14 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         if (file_exists(public_path('storage/items/' . $image))) {
             unlink(public_path('storage/items/' . $image));
         }
+    }
+
+    private function _clearItemCache()
+    {
+        foreach (range(1, 10) as $page) {
+            Cache::forget("all_items_page_{$page}_perpage_10");
+        }
+
+        Cache::forget("item_count");
     }
 }

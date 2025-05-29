@@ -59,9 +59,10 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
 
     public function getAllCategories($perPage)
     {
-        $cacheKey = "all_categories";
+        $currentPage = request('page', 1);
+        $cacheKey = "all_categories_page_{$currentPage}_perpage_{$perPage}";
 
-        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($perPage) {
+        return Cache::remember($cacheKey, 60 * 60, function () use ($perPage) {
             return $this->model->orderBy('created_at', 'desc')->paginate($perPage);
         });
     }
@@ -76,8 +77,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
             $data['image'] = $this->_saveImage($data['image']);
         }
 
-        Cache::forget("all_categories");
-        Cache::forget("category_count");
+        $this->_clearCategoryCache();
         // Create the category
         return $this->model->create($data);
     }
@@ -103,7 +103,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
             $data['image'] = $this->_saveImage($data['image']);
         }
 
-        Cache::forget("all_categories");
+        $this->_clearCategoryCache();
 
         return $category->update($data);
     }
@@ -117,8 +117,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
             $this->_deleteImage($category->image);
         }
 
-        Cache::forget("all_categories");
-        Cache::forget("category_count");
+        $this->_clearCategoryCache();
         return $category->delete();
     }
 
@@ -155,5 +154,14 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         if (file_exists(public_path('storage/categories/' . $image))) {
             unlink(public_path('storage/categories/' . $image));
         }
+    }
+
+    private function _clearCategoryCache()
+    {
+        foreach (range(1, 10) as $page) {
+            Cache::forget("all_categories_page_{$page}_perpage_10");
+        }
+
+        Cache::forget("category_count");
     }
 }
