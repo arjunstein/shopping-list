@@ -60,7 +60,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     private function _validate($data)
     {
         $rules = [
-            'item_name' => 'required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:items,item_name',
+            'item_name' => 'bail|required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:items,item_name',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
         ];
