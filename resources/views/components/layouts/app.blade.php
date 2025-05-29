@@ -30,7 +30,7 @@
 
         <!-- Overlay -->
         <div x-cloak x-show="sidebarOpen" @click="sidebarOpen = false"
-            class="fixed inset-0 bg-black bg-opacity-50 z-20 sm:hidden" x-transition.opacity>
+            class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" x-transition.opacity>
         </div>
 
         <!-- Main content -->
