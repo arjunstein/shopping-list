@@ -56,14 +56,15 @@
 </div>
 
 <script>
-    document.addEventListener('livewire:navigated', function() {
+    function renderChart() {
         const chartDom = document.getElementById('item-chart');
+        if (!chartDom) return;
+
+        // Data dari backend
         const monthlyItems = @json($monthlyItems);
         const monthlyLabels = @json($monthLabels);
 
-        if (!chartDom) return; // Mencegah error jika chart tidak ada
-
-        // Cek jika ada instance lama, destroy dulu
+        // Destroy instance lama jika ada
         if (echarts.getInstanceByDom(chartDom)) {
             echarts.dispose(chartDom);
         }
@@ -111,9 +112,14 @@
         };
 
         myChart.setOption(option);
+        window.addEventListener('resize', () => myChart.resize());
+    }
 
-        window.addEventListener('resize', () => {
-            myChart.resize();
-        });
+    // Saat halaman dimuat pertama kali
+    document.addEventListener('DOMContentLoaded', renderChart);
+
+    // Untuk navigasi Livewire (terutama Livewire 3)
+    document.addEventListener('livewire:navigated', () => {
+        setTimeout(renderChart, 100); // delay agar DOM sudah siap
     });
 </script>
