@@ -25,10 +25,10 @@
                             Image</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
-                            Category</th>
+                            Item name</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
-                            Item name</th>
+                            Category</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase whitespace-nowrap">
                             Created at</th>
@@ -47,10 +47,10 @@
                                     class="w-10 h-10 rounded-full" alt="{{ $item->category->name }}">
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                                {{ $item->category->name }}
+                                {{ $item->item_name }}
                             </td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {{ $item->item_name }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-300 whitespace-nowrap">
+                                {{ $item->category->name }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {{ $item->created_at->format('d-M-Y H:i') }}</td>
                             <td class="px-4 py-3 space-x-2 flex">
