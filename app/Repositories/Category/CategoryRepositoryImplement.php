@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Category;
 
-use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\Category;
+use App\Repositories\Category\CategoryRepository;
+use Illuminate\Support\Facades\Cache;
+use LaravelEasyRepository\Implementations\Eloquent;
 
 class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
 {
@@ -57,7 +59,11 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
 
     public function getAllCategories($perPage)
     {
-        return $this->model->orderBy('created_at', 'desc')->paginate($perPage);
+        $cacheKey = "all_categories";
+
+        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($perPage) {
+            return $this->model->orderBy('created_at', 'desc')->paginate($perPage);
+        });
     }
 
     public function createCategory(array $data)
@@ -69,6 +75,9 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         if (isset($data['image'])) {
             $data['image'] = $this->_saveImage($data['image']);
         }
+
+        Cache::forget("all_categories");
+        Cache::forget("category_count");
         // Create the category
         return $this->model->create($data);
     }
@@ -94,6 +103,8 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
             $data['image'] = $this->_saveImage($data['image']);
         }
 
+        Cache::forget("all_categories");
+
         return $category->update($data);
     }
 
@@ -105,6 +116,9 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         if ($category->image) {
             $this->_deleteImage($category->image);
         }
+
+        Cache::forget("all_categories");
+        Cache::forget("category_count");
         return $category->delete();
     }
 
