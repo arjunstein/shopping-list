@@ -23,8 +23,8 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
     private function _validate(array $data)
     {
         $rules = [
-            'name' => 'required|regex:/^[a-zA-Z0-9\s]+$/|max:50',
-            'description' => 'nullable|regex:/^[a-zA-Z0-9\s,]+$/|max:100',
+            'name' => 'required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:categories,name',
+            'description' => 'nullable|regex:/^[a-zA-Z0-9\s,&]+$/|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
         ];
 
@@ -32,8 +32,9 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         $messages = [
             'name.required' => 'The category field is required.',
             'name.max' => 'The category may not be greater than 50 characters.',
-            'name.regex' => 'The category may only contain letters, numbers, and spaces.',
-            'description.regex' => 'The description may only contain letters, numbers, spaces, and commas.',
+            'name.regex' => 'The category may only contain letters, numbers, spaces, commas, and ampersands.',
+            'name.unique' => 'The category has already been taken.',
+            'description.regex' => 'The description may only contain letters, numbers, spaces, commas, and ampersands.',
             'description.max' => 'The description may not be greater than 100 characters.',
             'image.image' => 'The image must be an image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg.',

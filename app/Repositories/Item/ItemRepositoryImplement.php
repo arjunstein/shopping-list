@@ -60,7 +60,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     private function _validate($data)
     {
         $rules = [
-            'item_name' => 'required|regex:/^[a-zA-Z0-9\s]+$/|max:50',
+            'item_name' => 'required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:items,item_name',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
         ];
@@ -68,7 +68,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         $messages = [
             'item_name.required' => 'The item field is required.',
             'item_name.max' => 'The item may not be greater than 50 characters.',
-            'item_name.regex' => 'The item may only contain letters, numbers, and spaces.',
+            'item_name.regex' => 'The item may only contain letters, numbers, spaces, commas, and ampersands.',
+            'item_name.unique' => 'The item name has already been taken.',
             'category_id.required' => 'The category field is required.',
             'category_id.exists' => 'The selected category is invalid.',
             'image.image' => 'The image must be an image file.',
