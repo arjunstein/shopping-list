@@ -29,7 +29,7 @@
         @include('components._partials.sidebar')
 
         <!-- Overlay -->
-        <div x-show="sidebarOpen" @click="sidebarOpen = false"
+        <div x-cloak x-show="sidebarOpen" @click="sidebarOpen = false"
             class="fixed inset-0 bg-black bg-opacity-50 z-20 sm:hidden" x-transition.opacity>
         </div>
 
