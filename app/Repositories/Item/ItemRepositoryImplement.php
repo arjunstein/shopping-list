@@ -58,6 +58,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         $this->_validate($data);
 
         Cache::forget("all_items");
+        Cache::forget("item_count");
 
         // handle image upload if present
         if (isset($data['image'])) {
@@ -133,6 +134,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         $item = $this->getItemById($id);
 
         Cache::forget("all_items");
+        Cache::forget("item_count");
 
         // Delete the image in storage if it exists
         if ($item->image) {

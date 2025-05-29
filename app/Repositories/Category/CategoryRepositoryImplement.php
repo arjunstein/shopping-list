@@ -77,6 +77,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         }
 
         Cache::forget("all_categories");
+        Cache::forget("category_count");
         // Create the category
         return $this->model->create($data);
     }
@@ -117,6 +118,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         }
 
         Cache::forget("all_categories");
+        Cache::forget("category_count");
         return $category->delete();
     }
 
