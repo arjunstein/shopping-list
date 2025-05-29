@@ -23,7 +23,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
     private function _validate(array $data)
     {
         $rules = [
-            'name' => 'required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:categories,name',
+            'name' => 'bail|required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:categories,name',
             'description' => 'nullable|regex:/^[a-zA-Z0-9\s,&]+$/|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
         ];
