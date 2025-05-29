@@ -25,7 +25,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
 
     public function getAllItems($perPage)
     {
-        return $this->model->with('category')->paginate($perPage);
+        return $this->model->with('category')->orderBy('category_id')->paginate($perPage);
     }
 
     public function getAllCategories()
