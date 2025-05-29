@@ -20,10 +20,21 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         $this->model = $model;
     }
 
-    private function _validate(array $data)
+    private function _validate(array $data, $id = null)
     {
+        $uniqueNameRule = 'unique:categories,name';
+        if ($id) {
+            $uniqueNameRule .= ',' . $id;
+        }
+
         $rules = [
-            'name' => 'bail|required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:categories,name',
+            'name' => [
+                'bail',
+                'required',
+                'regex:/^[a-zA-Z0-9\s,&]+$/',
+                'max:50',
+                $uniqueNameRule,
+            ],
             'description' => 'nullable|regex:/^[a-zA-Z0-9\s,&]+$/|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
         ];
@@ -70,7 +81,7 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
     public function updateCategory($id, array $data)
     {
         // Validate the data
-        $this->_validate($data);
+        $this->_validate($data, $id);
 
         $category = $this->getCategoryById($id);
 

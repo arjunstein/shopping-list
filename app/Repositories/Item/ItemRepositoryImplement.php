@@ -57,12 +57,24 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         return $this->model->create($data);
     }
 
-    private function _validate($data)
+    private function _validate($data, $id = null)
     {
+        // If an ID is provided, we will ignore the unique validation for that specific item
+        $uniqueNameRule = 'unique:items,item_name';
+        if ($id) {
+            $uniqueNameRule .= ',' . $id;
+        }
+
         $rules = [
-            'item_name' => 'bail|required|regex:/^[a-zA-Z0-9\s,&]+$/|max:50|unique:items,item_name',
+            'item_name' => [
+                'bail',
+                'required',
+                'regex:/^[a-zA-Z0-9\s,&]+$/', // allow letters, numbers, spaces, commas, and ampersands
+                'max:50',
+                $uniqueNameRule,
+            ],
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:512', // max 512 KB
         ];
 
         $messages = [
@@ -88,7 +100,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     public function updateItem($id, array $data)
     {
         // Validate the data
-        $this->_validate($data);
+        $this->_validate($data, $id);
 
         $item = $this->getItemById($id);
 
