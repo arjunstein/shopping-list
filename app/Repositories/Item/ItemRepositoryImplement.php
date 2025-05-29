@@ -3,9 +3,10 @@
 namespace App\Repositories\Item;
 
 use App\Models\Category;
-use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\Item;
 use App\Repositories\Item\ItemRepository;
+use Illuminate\Support\Facades\Cache;
+use LaravelEasyRepository\Implementations\Eloquent;
 
 class ItemRepositoryImplement extends Eloquent implements ItemRepository
 {
@@ -25,7 +26,14 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
 
     public function getAllItems($perPage)
     {
-        return $this->model->with('category')->orderBy('category_id')->paginate($perPage);
+        $cacheKey = "all_items";
+
+        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($perPage) {
+            return $this->model
+                ->with('category')
+                ->orderBy('category_id')
+                ->paginate($perPage);
+        });
     }
 
     public function getAllCategories()
@@ -48,6 +56,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     {
         // Validate the data
         $this->_validate($data);
+
+        Cache::forget("all_items");
 
         // handle image upload if present
         if (isset($data['image'])) {
@@ -102,6 +112,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         // Validate the data
         $this->_validate($data, $id);
 
+        Cache::forget("all_items");
+
         $item = $this->getItemById($id);
 
         // handle image upload if present
@@ -119,6 +131,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     public function deleteItem($id)
     {
         $item = $this->getItemById($id);
+
+        Cache::forget("all_items");
 
         // Delete the image in storage if it exists
         if ($item->image) {

@@ -27,8 +27,6 @@ class ListCategory extends Component
 
     public function render()
     {
-        $categories = $this->categoryRepository->searchCategories($this->search, $this->perPage);
-
         if ($this->search) {
             $categories = $this->categoryRepository->searchCategories($this->search, $this->perPage);
         } else {
