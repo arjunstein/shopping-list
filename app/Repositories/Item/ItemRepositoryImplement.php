@@ -5,7 +5,6 @@ namespace App\Repositories\Item;
 use App\Models\Category;
 use App\Models\Item;
 use App\Repositories\Item\ItemRepository;
-use Illuminate\Support\Facades\Cache;
 use LaravelEasyRepository\Implementations\Eloquent;
 
 class ItemRepositoryImplement extends Eloquent implements ItemRepository
@@ -26,15 +25,10 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
 
     public function getAllItems($perPage)
     {
-        $currentPage = request('page', 1);
-        $cacheKey = "all_items_page_{$currentPage}_perpage_{$perPage}";
-
-        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($perPage) {
-            return $this->model
-                ->with('category')
-                ->orderBy('category_id')
-                ->paginate($perPage);
-        });
+        return $this->model
+            ->with('category')
+            ->orderBy('category_id')
+            ->paginate($perPage);
     }
 
     public function getAllCategories()
@@ -57,8 +51,6 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     {
         // Validate the data
         $this->_validate($data);
-
-        $this->_clearItemCache();
 
         // handle image upload if present
         if (isset($data['image'])) {
@@ -113,8 +105,6 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         // Validate the data
         $this->_validate($data, $id);
 
-        $this->_clearItemCache();
-
         $item = $this->getItemById($id);
 
         // handle image upload if present
@@ -132,8 +122,6 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     public function deleteItem($id)
     {
         $item = $this->getItemById($id);
-
-        $this->_clearItemCache();
 
         // Delete the image in storage if it exists
         if ($item->image) {
@@ -168,14 +156,5 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         if (file_exists(public_path('storage/items/' . $image))) {
             unlink(public_path('storage/items/' . $image));
         }
-    }
-
-    private function _clearItemCache()
-    {
-        foreach (range(1, 10) as $page) {
-            Cache::forget("all_items_page_{$page}_perpage_10");
-        }
-
-        Cache::forget("item_count");
     }
 }
