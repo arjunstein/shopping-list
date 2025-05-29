@@ -5,7 +5,6 @@ namespace App\Repositories\Selected;
 use App\Models\Item;
 use App\Models\Selected;
 use App\Repositories\Selected\SelectedRepository;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use LaravelEasyRepository\Implementations\Eloquent;
 
@@ -55,9 +54,6 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
     public function saveSelectedItems(array $itemIds, $userId)
     {
-        $currentMonth = now()->month;
-        $currentYear = now()->year;
-
         // Validate the input data
         $this->_validate(['selectedItems' => $itemIds]);
 
@@ -72,13 +68,11 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
             ];
         }
 
-        Cache::forget("monthly_selected_counts_{$currentYear}_{$currentMonth}");
         // Insert new selected items
         return $this->model->insert($selectedItems);
     }
 
     // validate
-
     private function _validate(array $data)
     {
         $rules = [
