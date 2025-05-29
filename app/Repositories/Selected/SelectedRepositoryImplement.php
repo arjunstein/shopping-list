@@ -35,7 +35,7 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
 
         if ($today->between($startDate, $endDate)) {
             return $this->item->with('category')
-                ->orderBy('item_name', 'asc')
+                ->orderBy('category_id', 'asc')
                 ->get();
         }
 
