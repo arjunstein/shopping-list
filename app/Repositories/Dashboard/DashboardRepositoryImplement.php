@@ -84,8 +84,10 @@ class DashboardRepositoryImplement extends Eloquent implements DashboardReposito
         $currentMonth = now()->month;
         $labels = [];
 
+        $baseDate = now()->startOfYear();
+
         foreach (range(1, $currentMonth) as $month) {
-            $labels[] = now()->month($month)->format('F');
+            $labels[] = $baseDate->copy()->month($month)->format('F');
         }
 
         return $labels;
