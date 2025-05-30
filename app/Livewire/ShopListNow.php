@@ -12,6 +12,7 @@ class ShopListNow extends Component
     #[Title('Shop List')]
     public $title = 'Shopping list';
     public $selectedItems = [];
+    public bool $showModalConfirmDone = false;
 
     protected $selectedRepository;
 
