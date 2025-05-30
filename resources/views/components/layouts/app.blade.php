@@ -21,7 +21,7 @@
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full">
 
-    <div class="flex h-screen">
+    <div class="flex h-screen" x-data="{ sidebarOpen: false }">
 
         <!-- Sidebar -->
         @include('components._partials.sidebar')
