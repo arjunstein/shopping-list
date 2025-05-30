@@ -28,6 +28,11 @@
     @include('components._partials.scripts')
     @stack('scripts')
 
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            // Re-inisialisasi Alpine setelah navigasi Livewire
+            window.Alpine?.initTree(document.body);
+        });
 </body>
 
 </html>
