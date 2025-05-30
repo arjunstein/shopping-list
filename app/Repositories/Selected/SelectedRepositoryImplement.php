@@ -35,9 +35,11 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
 
         if ($today->between($startDate, $endDate)) {
-            return $this->item->with('category')
-                ->orderBy('category_id', 'asc')
-                ->get();
+            return Cache::remember('items_in_shop_list', 60 * 60 * 2, function () {
+                return $this->item->with('category')
+                    ->orderBy('category_id', 'asc')
+                    ->get();
+            });
         }
 
         return collect([]);

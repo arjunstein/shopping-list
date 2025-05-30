@@ -118,6 +118,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
             }
             $data['image'] = $this->_saveImage($data['image']);
         }
+        // Clear the cache for item count
+        $this->_clearCacheItemCount();
         // update data
         return $item->update($data);
     }
@@ -165,9 +167,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
 
     private function _clearCacheItemCount()
     {
-        $cacheKey = "item_count";
-        if (Cache::has($cacheKey)) {
-            Cache::forget($cacheKey);
-        }
+        Cache::forget('item_count');
+        Cache::forget('items_in_shop_list');
     }
 }
