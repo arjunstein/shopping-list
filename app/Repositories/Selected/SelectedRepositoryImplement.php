@@ -5,6 +5,7 @@ namespace App\Repositories\Selected;
 use App\Models\Item;
 use App\Models\Selected;
 use App\Repositories\Selected\SelectedRepository;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use LaravelEasyRepository\Implementations\Eloquent;
 
@@ -34,9 +35,11 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
 
         if ($today->between($startDate, $endDate)) {
-            return $this->item->with('category')
-                ->orderBy('category_id', 'asc')
-                ->get();
+            return Cache::remember('items_in_shop_list', 60 * 60 * 2, function () {
+                return $this->item->with('category')
+                    ->orderBy('category_id', 'asc')
+                    ->get();
+            });
         }
 
         return collect([]);
@@ -68,6 +71,9 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
             ];
         }
 
+        // Clear cache before inserting new items
+        $this->_clearCache();
+
         // Insert new selected items
         return $this->model->insert($selectedItems);
     }
@@ -85,5 +91,16 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         ];
 
         return validator($data, $rules, $messages)->validate();
+    }
+
+    private function _clearCache()
+    {
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        $cacheKey = "monthly_selected_counts_{$currentYear}_{$currentMonth}";
+
+        if (Cache::has($cacheKey)) {
+            Cache::forget($cacheKey);
+        }
     }
 }

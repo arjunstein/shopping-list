@@ -4,6 +4,7 @@ namespace App\Repositories\Category;
 
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
+use Illuminate\Support\Facades\Cache;
 use LaravelEasyRepository\Implementations\Eloquent;
 
 class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
@@ -70,6 +71,8 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         if (isset($data['image'])) {
             $data['image'] = $this->_saveImage($data['image']);
         }
+        // Clear the cache for category count
+        $this->_clearCacheCategoryCount();
         // Create the category
         return $this->model->create($data);
     }
@@ -106,6 +109,10 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
         if ($category->image) {
             $this->_deleteImage($category->image);
         }
+
+        // Clear the cache for category count
+        $this->_clearCacheCategoryCount();
+        // Delete the category
         return $category->delete();
     }
 
@@ -141,6 +148,14 @@ class CategoryRepositoryImplement extends Eloquent implements CategoryRepository
     {
         if (file_exists(public_path('storage/categories/' . $image))) {
             unlink(public_path('storage/categories/' . $image));
+        }
+    }
+
+    private function _clearCacheCategoryCount()
+    {
+        $cacheKey = "category_count";
+        if (Cache::has($cacheKey)) {
+            Cache::forget($cacheKey);
         }
     }
 }
