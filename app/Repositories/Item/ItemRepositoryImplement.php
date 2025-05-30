@@ -5,6 +5,7 @@ namespace App\Repositories\Item;
 use App\Models\Category;
 use App\Models\Item;
 use App\Repositories\Item\ItemRepository;
+use Illuminate\Support\Facades\Cache;
 use LaravelEasyRepository\Implementations\Eloquent;
 
 class ItemRepositoryImplement extends Eloquent implements ItemRepository
@@ -56,6 +57,8 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         if (isset($data['image'])) {
             $data['image'] = $this->_saveImage($data['image']);
         }
+        // Clear the cache for item count
+        $this->_clearCacheItemCount();
         // create item
         return $this->model->create($data);
     }
@@ -127,7 +130,9 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         if ($item->image) {
             $this->_deleteImage($item->image);
         }
-
+        // Clear the cache for item count
+        $this->_clearCacheItemCount();
+        // Delete the item
         return $item->delete();
     }
 
@@ -155,6 +160,14 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     {
         if (file_exists(public_path('storage/items/' . $image))) {
             unlink(public_path('storage/items/' . $image));
+        }
+    }
+
+    private function _clearCacheItemCount()
+    {
+        $cacheKey = "item_count";
+        if (Cache::has($cacheKey)) {
+            Cache::forget($cacheKey);
         }
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Selected;
 use App\Models\User;
 use App\Repositories\Dashboard\DashboardRepository;
+use Illuminate\Support\Facades\Cache;
 use LaravelEasyRepository\Implementations\Eloquent;
 
 class DashboardRepositoryImplement extends Eloquent implements DashboardRepository
@@ -30,17 +31,26 @@ class DashboardRepositoryImplement extends Eloquent implements DashboardReposito
 
     public function countUsers(): int
     {
-        return $this->user->count();
+        $cacheKey = "user_count";
+        return Cache::remember($cacheKey, 60 * 60 * 2, function () {
+            return $this->user->count();
+        });
     }
 
     public function countCategories(): int
     {
-        return $this->category->count();
+        $cacheKey = "category_count";
+        return Cache::remember($cacheKey, 60 * 60 * 2, function () {
+            return $this->category->count();
+        });
     }
 
     public function countItems(): int
     {
-        return $this->item->count();
+        $cacheKey = "item_count";
+        return Cache::remember($cacheKey, 60 * 60 * 2, function () {
+            return $this->item->count();
+        });
     }
 
     public function countMonthlyItems(): array
@@ -48,21 +58,26 @@ class DashboardRepositoryImplement extends Eloquent implements DashboardReposito
         $currentYear = now()->year;
         $currentMonth = now()->month;
 
-        $counts = Selected::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-            ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', '<=', $currentMonth)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total', 'month')
-            ->toArray();
+        $cacheKey = "monthly_selected_counts_{$currentYear}_{$currentMonth}";
 
-        $monthlyCounts = [];
-        foreach (range(1, $currentMonth) as $month) {
-            $monthlyCounts[] = $counts[$month] ?? 0;
-        }
+        return Cache::remember($cacheKey, 60 * 60, function () use ($currentYear, $currentMonth) {
+            $counts = Selected::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->whereYear('created_at', $currentYear)
+                ->whereMonth('created_at', '<=', $currentMonth)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('total', 'month')
+                ->toArray();
 
-        return $monthlyCounts;
+            $monthlyCounts = [];
+            foreach (range(1, $currentMonth) as $month) {
+                $monthlyCounts[] = $counts[$month] ?? 0;
+            }
+
+            return $monthlyCounts;
+        });
     }
+
 
     public function getMonthLabels(): array
     {
