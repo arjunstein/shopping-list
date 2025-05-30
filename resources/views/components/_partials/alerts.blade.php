@@ -35,9 +35,11 @@
 
     <div x-cloak x-data="{ show: false, message: '' }" x-show="show" x-transition
         x-on:show-alert.window="
-    message = $event.detail.message;
-    show = true;
-    setTimeout(() => show = false, 3000);
+    if ($event.detail?.message) {
+        message = $event.detail.message;
+        show = true;
+        setTimeout(() => show = false, 3000);
+    }
 "
         class="fixed top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0 w-[90%] sm:w-full max-w-sm z-50">
         <div role="alert"
@@ -72,9 +74,11 @@
 
     <div x-cloak x-data="{ show: false, message: '' }" x-show="show" x-transition
         x-on:saved-item.window="
-    message = $event.detail.message;
-    show = true;
-    setTimeout(() => show = false, 3000);
+    if ($event.detail?.message) {
+        message = $event.detail.message;
+        show = true;
+        setTimeout(() => show = false, 3000);
+    }
 "
         class="fixed top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0 w-[90%] sm:w-full max-w-sm z-50">
         <div role="alert"
@@ -109,9 +113,11 @@
 
     <div x-cloak x-data="{ show: false, message: '' }" x-show="show" x-transition
         x-on:error.window="
-    message = $event.detail.message;
-    show = true;
-    setTimeout(() => show = false, 3000);
+    if ($event.detail?.message) {
+        message = $event.detail.message;
+        show = true;
+        setTimeout(() => show = false, 3000);
+    }
 "
         class="fixed top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0 w-[90%] sm:w-full max-w-sm z-50">
         <div role="alert"
