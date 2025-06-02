@@ -30,12 +30,18 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
     {
         $today = now();
 
-        // range date
-        $startDate = now()->startOfMonth()->setDay(25)->startOfDay();
-        $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
+        if ($today->day <= 10) {
+            $startDate = now()->subMonth()->setDay(25)->startOfDay();
+            $endDate = now()->setDay(10)->endOfDay();
+        } else {
+            $startDate = now()->setDay(25)->startOfDay();
+            $endDate = now()->addMonth()->setDay(10)->endOfDay();
+        }
+
+        $cacheKey = "items_in_shop_list_" . $startDate->format('Y_m_d') . '_' . $endDate->format('Y_m_d');
 
         if ($today->between($startDate, $endDate)) {
-            return Cache::remember('items_in_shop_list', 60 * 60 * 2, function () {
+            return Cache::remember($cacheKey, 60 * 60 * 2, function () {
                 return $this->item->with('category')
                     ->orderBy('category_id', 'asc')
                     ->get();
