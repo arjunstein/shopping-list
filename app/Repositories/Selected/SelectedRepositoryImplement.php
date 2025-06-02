@@ -51,10 +51,17 @@ class SelectedRepositoryImplement extends Eloquent implements SelectedRepository
         return collect([]);
     }
 
-    public function hasSubmittedItemsThisMonth($userId)
+    public function hasSubmittedItemsThisPeriod($userId)
     {
-        $startDate = now()->startOfMonth()->setDay(25)->startOfDay();
-        $endDate = now()->addMonth()->startOfMonth()->setDay(10)->endOfDay();
+        $today = now();
+
+        if ($today->day <= 10) {
+            $startDate = now()->subMonth()->setDay(25)->startOfDay();
+            $endDate = now()->setDay(10)->endOfDay();
+        } else {
+            $startDate = now()->setDay(25)->startOfDay();
+            $endDate = now()->addMonth()->setDay(10)->endOfDay();
+        }
 
         return $this->model->where('user_id', $userId)
             ->whereBetween('created_at', [$startDate, $endDate])
