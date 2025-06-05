@@ -59,6 +59,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         }
         // Clear the cache for item count
         $this->_clearCacheItemCount();
+        $this->_clearCacheShopListItem();
         // create item
         return $this->model->create($data);
     }
@@ -120,6 +121,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         }
         // Clear the cache for item count
         $this->_clearCacheItemCount();
+        $this->_clearCacheShopListItem();
         // update data
         return $item->update($data);
     }
@@ -134,6 +136,7 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
         }
         // Clear the cache for item count
         $this->_clearCacheItemCount();
+        $this->_clearCacheShopListItem();
         // Delete the item
         return $item->delete();
     }
@@ -169,5 +172,22 @@ class ItemRepositoryImplement extends Eloquent implements ItemRepository
     {
         Cache::forget('item_count');
         Cache::forget('items_in_shop_list');
+    }
+
+    private function _clearCacheShopListItem()
+    {
+        $today = now();
+
+        if ($today->day <= 10) {
+            $startDate = now()->subMonth()->setDay(25)->startOfDay();
+            $endDate = now()->setDay(10)->endOfDay();
+        } else {
+            $startDate = now()->setDay(25)->startOfDay();
+            $endDate = now()->addMonth()->setDay(10)->endOfDay();
+        }
+
+        $cacheKey = "items_in_shop_list_" . $startDate->format('Y_m_d') . '_' . $endDate->format('Y_m_d');
+
+        Cache::forget($cacheKey);
     }
 }
