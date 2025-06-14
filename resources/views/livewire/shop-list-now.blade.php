@@ -41,14 +41,15 @@
                     <p class="py-2">{{ 'Total items: ' . $allItems->count() }}</p>
                 @endif
             </form>
-
-            <!-- Tombol Done -->
-            <div class="flex justify-center mt-4">
-                <button type="button" @click="$wire.set('showModalConfirmDone', true)"
-                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
-                    Done
-                </button>
-            </div>
+            @if ($allItems->count() > 0)
+                <!-- Tombol Done -->
+                <div class="flex justify-center mt-4">
+                    <button type="button" @click="$wire.set('showModalConfirmDone', true)"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
+                        Done
+                    </button>
+                </div>
+            @endif
         </div>
 
         <!-- Modal Konfirmasi -->
